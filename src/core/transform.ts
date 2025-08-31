@@ -1,7 +1,7 @@
 import { ECEFCoordinates } from './ecef';
 
 /**
- * 3x3回転行列
+ * 3x3 rotation matrix
  */
 export type RotationMatrix = [
   [number, number, number],
@@ -10,7 +10,7 @@ export type RotationMatrix = [
 ];
 
 /**
- * クォータニオン表現
+ * Quaternion representation
  */
 export interface Quaternion {
   x: number;
@@ -20,23 +20,23 @@ export interface Quaternion {
 }
 
 /**
- * ECEFからローカル座標への変換設定
+ * Transform configuration from ECEF to local coordinates
  */
 export interface TransformConfig {
-  /** ECEF座標の参照中心点 */
+  /** Reference center point in ECEF coordinates */
   center: ECEFCoordinates;
-  /** 適用するオプションの回転 */
+  /** Optional rotation to apply */
   rotation?: Quaternion;
-  /** オプションのスケール係数 */
+  /** Optional scale factor */
   scale?: number;
 }
 
 /**
- * ECEF座標を中心点に対するローカル座標に変換
+ * Convert ECEF coordinates to local coordinates relative to center point
  * 
- * @param ecef - 変換するECEF座標
- * @param center - ECEFの参照中心点
- * @returns 中心に対するローカル座標
+ * @param ecef - ECEF coordinates to convert
+ * @param center - ECEF reference center point
+ * @returns Local coordinates relative to center
  */
 export function ecefToLocal(ecef: ECEFCoordinates, center: ECEFCoordinates): ECEFCoordinates {
   return {
@@ -47,11 +47,11 @@ export function ecefToLocal(ecef: ECEFCoordinates, center: ECEFCoordinates): ECE
 }
 
 /**
- * ローカル座標をECEF座標に変換
+ * Convert local coordinates to ECEF coordinates
  * 
- * @param local - ローカル座標
- * @param center - ECEFの参照中心点
- * @returns ECEF座標
+ * @param local - Local coordinates
+ * @param center - ECEF reference center point
+ * @returns ECEF coordinates
  */
 export function localToECEF(local: ECEFCoordinates, center: ECEFCoordinates): ECEFCoordinates {
   return {
@@ -62,31 +62,31 @@ export function localToECEF(local: ECEFCoordinates, center: ECEFCoordinates): EC
 }
 
 /**
- * ECEF座標をローカルの上方向に合わせるためのクォータニオンを作成
+ * Create a quaternion to align ECEF coordinates with local up direction
  * 
- * @param center - ECEF座標の中心点
- * @returns 回転用のクォータニオン
+ * @param center - Center point in ECEF coordinates
+ * @returns Quaternion for rotation
  */
 export function createECEFToLocalRotation(center: ECEFCoordinates): Quaternion {
-  // 中心ベクトルを正規化して地球中心からの方向を取得
+  // Normalize center vector to get direction from Earth center
   const length = Math.sqrt(center.x * center.x + center.y * center.y + center.z * center.z);
   const dirX = center.x / length;
   const dirY = center.y / length;
   const dirZ = center.z / length;
   
-  // この方向をY軸（上）に合わせるための回転を計算
-  // これはECEFの「上」方向をローカルY軸に回転させることと同等
+  // Calculate rotation to align this direction with Y-axis (up)
+  // This is equivalent to rotating ECEF 'up' direction to local Y-axis
   const angle = Math.acos(dirY);
   const s = Math.sin(angle / 2);
   
-  // 回転軸は方向とY軸の外積
+  // Rotation axis is cross product of direction and Y-axis
   const axisX = dirZ;
   const axisY = 0;
   const axisZ = -dirX;
   const axisLength = Math.sqrt(axisX * axisX + axisZ * axisZ);
   
   if (axisLength < 0.00001) {
-    // 方向はすでにY軸に合わせられている
+    // Direction is already aligned with Y-axis
     return { x: 0, y: 0, z: 0, w: 1 };
   }
   
@@ -99,17 +99,17 @@ export function createECEFToLocalRotation(center: ECEFCoordinates): Quaternion {
 }
 
 /**
- * 点にクォータニオン回転を適用
+ * Apply quaternion rotation to a point
  * 
- * @param point - 回転させる点
- * @param quaternion - 回転クォータニオン
- * @returns 回転後の点
+ * @param point - Point to rotate
+ * @param quaternion - Rotation quaternion
+ * @returns Rotated point
  */
 export function applyQuaternion(point: ECEFCoordinates, quaternion: Quaternion): ECEFCoordinates {
   const { x, y, z } = point;
   const { x: qx, y: qy, z: qz, w: qw } = quaternion;
   
-  // クォータニオン乗算: q * p * q^-1
+  // Quaternion multiplication: q * p * q^-1
   const ix = qw * x + qy * z - qz * y;
   const iy = qw * y + qz * x - qx * z;
   const iz = qw * z + qx * y - qy * x;
@@ -123,24 +123,24 @@ export function applyQuaternion(point: ECEFCoordinates, quaternion: Quaternion):
 }
 
 /**
- * ECEFからローカル座標への完全な変換を作成
+ * Create a complete transform from ECEF to local coordinates
  * 
- * @param config - 変換設定
- * @returns 変換関数
+ * @param config - Transform configuration
+ * @returns Transform function
  */
 export function createTransform(config: TransformConfig) {
   const { center, rotation, scale = 1 } = config;
   
   return (ecef: ECEFCoordinates): ECEFCoordinates => {
-    // まずローカル座標に平行移動
+    // First translate to local coordinates
     let local = ecefToLocal(ecef, center);
     
-    // 指定されていれば回転を適用
+    // Apply rotation if specified
     if (rotation) {
       local = applyQuaternion(local, rotation);
     }
     
-    // 指定されていればスケールを適用
+    // Apply scale if specified
     if (scale !== 1) {
       local = {
         x: local.x * scale,
@@ -154,7 +154,7 @@ export function createTransform(config: TransformConfig) {
 }
 
 /**
- * ECEF座標のバウンディングボックスを計算
+ * Calculate bounding box of ECEF coordinates
  */
 export function calculateBounds(points: ECEFCoordinates[]): {
   min: ECEFCoordinates;

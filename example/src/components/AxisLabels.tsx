@@ -1,7 +1,7 @@
 /**
- * 軸ラベルコンポーネント
+ * Axis Labels Component
  * 
- * XYZ軸用の3Dテキストラベルを作成
+ * Creates 3D text labels for XYZ axes
  */
 
 import React from 'react';
@@ -17,7 +17,7 @@ export const AxisLabels: React.FC<AxisLabelsProps> = ({ size = 5000 }) => {
   
   return (
     <>
-      {/* X軸ラベル - 赤 */}
+      {/* X-axis label - Red */}
       <Text
         position={[labelOffset, 0, 0]}
         fontSize={fontSize}
@@ -28,7 +28,7 @@ export const AxisLabels: React.FC<AxisLabelsProps> = ({ size = 5000 }) => {
         X
       </Text>
       
-      {/* Y軸ラベル - 緑 */}
+      {/* Y-axis label - Green */}
       <Text
         position={[0, labelOffset, 0]}
         fontSize={fontSize}
@@ -39,7 +39,7 @@ export const AxisLabels: React.FC<AxisLabelsProps> = ({ size = 5000 }) => {
         Y
       </Text>
       
-      {/* Z軸ラベル - 青 */}
+      {/* Z-axis label - Blue */}
       <Text
         position={[0, 0, labelOffset]}
         fontSize={fontSize}
@@ -50,42 +50,42 @@ export const AxisLabels: React.FC<AxisLabelsProps> = ({ size = 5000 }) => {
         Z
       </Text>
       
-      {/* 軸凡例ボックス */}
+      {/* Axis legend box */}
       <group position={[size * 0.8, size * 0.8, 0]}>
-        {/* 背景 */}
+        {/* Background */}
         <mesh>
           <planeGeometry args={[size * 0.3, size * 0.15]} />
           <meshBasicMaterial color={0x1a1a1a} opacity={0.95} transparent />
         </mesh>
         
-        {/* X軸情報 */}
+        {/* X-axis info */}
         <Text
           position={[0, fontSize * 0.4, 1]}
           fontSize={fontSize * 0.3}
           color="#ff0000"
           anchorX="center"
         >
-          X軸: 赤 (Red)
+          X-axis: Red
         </Text>
         
-        {/* Y軸情報 */}
+        {/* Y-axis info */}
         <Text
           position={[0, 0, 1]}
           fontSize={fontSize * 0.3}
           color="#00ff00"
           anchorX="center"
         >
-          Y軸: 緑 (Green)
+          Y-axis: Green
         </Text>
         
-        {/* Z軸情報 */}
+        {/* Z-axis info */}
         <Text
           position={[0, -fontSize * 0.4, 1]}
           fontSize={fontSize * 0.3}
           color="#0088ff"
           anchorX="center"
         >
-          Z軸: 青 (Blue)
+          Z-axis: Blue
         </Text>
       </group>
     </>

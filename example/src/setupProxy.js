@@ -1,8 +1,8 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = function(app) {
-  // geospatial.jpにホストされているPLATEAUデータ用のプロキシ
-  // 3D Tilesをロードする際のCORS問題を回避するのに役立ちます
+  // Proxy for PLATEAU data hosted on geospatial.jp
+  // Helps avoid CORS issues when loading 3D Tiles
   app.use(
     '/api/plateau',
     createProxyMiddleware({
@@ -12,7 +12,7 @@ module.exports = function(app) {
         '^/api/plateau': '',
       },
       onProxyRes: function (proxyRes, req, res) {
-        // 必要に応じてCORSヘッダーを追加
+        // Add CORS headers if needed
         proxyRes.headers['Access-Control-Allow-Origin'] = '*';
       }
     })

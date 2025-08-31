@@ -1,36 +1,36 @@
 import { WGS84, MATH } from './constants';
 
 /**
- * 地理座標（緯度、経度、高さ）
+ * Geographic coordinates (latitude, longitude, height)
  */
 export interface GeodeticCoordinates {
-  /** 緯度（度） */
+  /** Latitude in degrees */
   lat: number;
-  /** 経度（度） */
+  /** Longitude in degrees */
   lon: number;
-  /** 楕円体上の高さ（メートル） */
+  /** Height above ellipsoid in meters */
   height: number;
 }
 
 /**
- * ECEF（地球中心・地球固定）座標
+ * ECEF (Earth-Centered, Earth-Fixed) coordinates
  */
 export interface ECEFCoordinates {
-  /** X座標（メートル） */
+  /** X coordinate in meters */
   x: number;
-  /** Y座標（メートル） */
+  /** Y coordinate in meters */
   y: number;
-  /** Z座標（メートル） */
+  /** Z coordinate in meters */
   z: number;
 }
 
 /**
- * ECEF座標を測地座標（緯度/経度/高さ）に変換
+ * Convert ECEF coordinates to geodetic coordinates (latitude/longitude/height)
  * 
- * @param x - ECEF X座標（メートル）
- * @param y - ECEF Y座標（メートル）
- * @param z - ECEF Z座標（メートル）
- * @returns 測地座標
+ * @param x - ECEF X coordinate in meters
+ * @param y - ECEF Y coordinate in meters
+ * @param z - ECEF Z coordinate in meters
+ * @returns Geodetic coordinates
  */
 export function ecefToGeodetic(x: number, y: number, z: number): GeodeticCoordinates {
   const a = WGS84.a;
@@ -58,12 +58,12 @@ export function ecefToGeodetic(x: number, y: number, z: number): GeodeticCoordin
 }
 
 /**
- * 測地座標をECEF座標に変換
+ * Convert geodetic coordinates to ECEF coordinates
  * 
- * @param lat - 緯度（度）
- * @param lon - 経度（度）
- * @param height - 楕円体上の高さ（メートル）
- * @returns ECEF座標
+ * @param lat - Latitude in degrees
+ * @param lon - Longitude in degrees
+ * @param height - Height above ellipsoid in meters
+ * @returns ECEF coordinates
  */
 export function geodeticToECEF(lat: number, lon: number, height: number = 0): ECEFCoordinates {
   const a = WGS84.a;
@@ -82,11 +82,11 @@ export function geodeticToECEF(lat: number, lon: number, height: number = 0): EC
 }
 
 /**
- * 2つのECEF点間の距離を計算
+ * Calculate distance between two ECEF points
  * 
- * @param p1 - 最初のECEF座標
- * @param p2 - 2番目のECEF座標
- * @returns 距離（メートル）
+ * @param p1 - First ECEF coordinate
+ * @param p2 - Second ECEF coordinate
+ * @returns Distance in meters
  */
 export function ecefDistance(p1: ECEFCoordinates, p2: ECEFCoordinates): number {
   const dx = p2.x - p1.x;
@@ -96,10 +96,10 @@ export function ecefDistance(p1: ECEFCoordinates, p2: ECEFCoordinates): number {
 }
 
 /**
- * ECEF座標の配列から中心点を取得
+ * Get center point from array of ECEF coordinates
  * 
- * @param points - ECEF座標の配列
- * @returns 中心ECEF座標
+ * @param points - Array of ECEF coordinates
+ * @returns Center ECEF coordinate
  */
 export function ecefCenter(points: ECEFCoordinates[]): ECEFCoordinates {
   if (points.length === 0) {

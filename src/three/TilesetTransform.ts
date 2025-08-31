@@ -3,21 +3,21 @@ import { ecefToGeodetic, ECEFCoordinates } from '../core/ecef';
 import { createECEFToLocalRotation, ecefToLocal } from '../core/transform';
 
 /**
- * 3D Tilesの変換オプション
+ * 3D Tiles transformation options
  */
 export interface TilesetTransformOptions {
-  /** ECEF座標の中心点 */
+  /** Center point in ECEF coordinates */
   center?: ECEFCoordinates;
-  /** ローカルの上方向に合わせて自動回転するかどうか */
+  /** Whether to auto-rotate to align with local up direction */
   autoRotate?: boolean;
-  /** タイルのスケール係数 */
+  /** Scale factor for tiles */
   scale?: number;
-  /** 変換後に適用するオフセット */
+  /** Offset to apply after transformation */
   offset?: THREE.Vector3;
 }
 
 /**
- * ECEFからローカル座標への3D Tiles変換用Three.js Group
+ * Three.js Group for 3D Tiles transformation from ECEF to local coordinates
  * 
  * @example
  * ```typescript
@@ -51,42 +51,42 @@ export class TilesetTransform extends THREE.Group {
   }
 
   /**
-   * 変換の中心点を設定
+   * Set the center point for transformation
    * 
-   * @param center - ECEF座標の中心点
+   * @param center - Center point in ECEF coordinates
    */
   setCenter(center: ECEFCoordinates): void {
     this._center = center;
     
-    // オフセットを計算（Y軸に沿った中心長の負値）
+    // Calculate offset (negative center length along Y-axis)
     const centerVector = new THREE.Vector3(center.x, center.y, center.z);
     const offset = new THREE.Vector3(0, -centerVector.length(), 0);
     
-    // autoRotateが有効な場合は回転を適用
+    // Apply rotation if autoRotate is enabled
     if (this.options.autoRotate) {
       const rotation = createECEFToLocalRotation(center);
       this._rotation = new THREE.Quaternion(rotation.x, rotation.y, rotation.z, rotation.w);
       this.quaternion.copy(this._rotation);
     }
     
-    // オフセットを適用
+    // Apply offset
     this.position.copy(this.options.offset || offset);
     
-    // 指定されていればスケールを適用
+    // Apply scale if specified
     if (this.options.scale && this.options.scale !== 1) {
       this.scale.setScalar(this.options.scale);
     }
   }
 
   /**
-   * 現在の中心点を取得
+   * Get the current center point
    */
   getCenter(): ECEFCoordinates | undefined {
     return this._center;
   }
 
   /**
-   * 中心点の測地座標を取得
+   * Get the geodetic coordinates of the center point
    */
   getCenterGeodetic(): ReturnType<typeof ecefToGeodetic> | undefined {
     if (!this._center) return undefined;
@@ -94,26 +94,26 @@ export class TilesetTransform extends THREE.Group {
   }
 
   /**
-   * ECEFからローカル座標へ点を変換
+   * Transform a point from ECEF to local coordinates
    * 
-   * @param ecef - ECEF座標の点
-   * @returns ローカル座標の点
+   * @param ecef - Point in ECEF coordinates
+   * @returns Point in local coordinates
    */
   transformPoint(ecef: ECEFCoordinates): THREE.Vector3 {
     if (!this._center) {
       throw new Error('Center must be set before transforming points');
     }
     
-    // 中心に対するローカル座標に変換
+    // Transform to local coordinates relative to center
     const local = ecefToLocal(ecef, this._center);
     const localVector = new THREE.Vector3(local.x, local.y, local.z);
     
-    // 回転が存在する場合は適用
+    // Apply rotation if it exists
     if (this._rotation) {
       localVector.applyQuaternion(this._rotation);
     }
     
-    // スケールを適用
+    // Apply scale
     if (this.options.scale) {
       localVector.multiplyScalar(this.options.scale);
     }
@@ -122,17 +122,17 @@ export class TilesetTransform extends THREE.Group {
   }
 
   /**
-   * TilesRendererインスタンスに基づいて変換を更新
-   * タイルセットから中心を自動的に抽出
+   * Update transformation based on TilesRenderer instance
+   * Automatically extracts center from tileset
    * 
-   * @param tilesRenderer - TilesRendererインスタンス
+   * @param tilesRenderer - TilesRenderer instance
    */
   updateFromTilesRenderer(tilesRenderer: any): void {
-    // タイルセットから中心を取得を試みる
+    // Attempt to get center from tileset
     if (tilesRenderer.root && tilesRenderer.root.boundingVolume) {
       const bv = tilesRenderer.root.boundingVolume;
       
-      // centerプロパティがある場合（バウンディングスフィア用）
+      // If center property exists (for bounding sphere)
       if (bv.center) {
         this.setCenter({
           x: bv.center[0],
@@ -145,11 +145,11 @@ export class TilesetTransform extends THREE.Group {
 }
 
 /**
- * ECEFからローカルへの変換行列を作成
+ * Create transformation matrix from ECEF to local
  * 
- * @param center - ECEF座標の中心点
- * @param options - 変換オプション
- * @returns 変換行列
+ * @param center - Center point in ECEF coordinates
+ * @param options - Transformation options
+ * @returns Transformation matrix
  */
 export function createTransformMatrix(
   center: ECEFCoordinates,
@@ -157,7 +157,7 @@ export function createTransformMatrix(
 ): THREE.Matrix4 {
   const matrix = new THREE.Matrix4();
   
-  // 中心を原点に移動する平行移動を作成
+  // Create translation to move center to origin
   const translation = new THREE.Matrix4().makeTranslation(
     -center.x,
     -center.y,
@@ -166,7 +166,7 @@ export function createTransformMatrix(
   
   matrix.multiply(translation);
   
-  // 必要に応じて回転を適用
+  // Apply rotation if needed
   if (options.autoRotate) {
     const rotation = createECEFToLocalRotation(center);
     const quaternion = new THREE.Quaternion(rotation.x, rotation.y, rotation.z, rotation.w);

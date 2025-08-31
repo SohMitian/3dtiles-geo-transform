@@ -1,23 +1,23 @@
 /**
- * WGS84楕円体パラメータ
+ * WGS84 ellipsoid parameters
  */
 export const WGS84 = {
-  /** 長半径（赤道半径）（メートル） */
+  /** Semi-major axis (equatorial radius) in meters */
   a: 6378137.0,
-  /** 扁平率 */
+  /** Flattening */
   f: 1 / 298.257223563,
-  /** 短半径（極半径）（メートル） */
+  /** Semi-minor axis (polar radius) in meters */
   b: 6378137.0 * (1 - 1 / 298.257223563),
-  /** 第一離心率の2乗 */
+  /** Square of first eccentricity */
   e2: 1 - Math.pow(1 - 1 / 298.257223563, 2),
 } as const;
 
 /**
- * 数学定数
+ * Mathematical constants
  */
 export const MATH = {
-  /** 度からラジアンへの変換係数 */
+  /** Conversion factor from degrees to radians */
   DEG_TO_RAD: Math.PI / 180,
-  /** ラジアンから度への変換係数 */
+  /** Conversion factor from radians to degrees */
   RAD_TO_DEG: 180 / Math.PI,
 } as const;

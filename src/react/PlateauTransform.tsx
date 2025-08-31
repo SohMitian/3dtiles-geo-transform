@@ -27,8 +27,8 @@ interface TransformState {
 }
 
 /**
- * PLATEAU 3D Tilesを変換するReactコンポーネント
- * このコンポーネントは3D Tiles用のコンテキストと変換グループを提供します
+ * React component for transforming 3D Tiles
+ * This component provides context and transformation group for 3D Tiles
  */
 export const PlateauTilesetTransform: React.FC<PlateauTilesetTransformProps> = ({ children }) => {
   const [{ offset, rotation }, setState] = useState<TransformState>({});
@@ -55,7 +55,7 @@ export const PlateauTilesetTransform: React.FC<PlateauTilesetTransformProps> = (
 
   const context = useMemo(() => ({ setCenter }), [setCenter]);
 
-  // JSXの型問題を回避するためにReact.createElementを使用
+  // Use React.createElement to avoid JSX type issues
   return React.createElement(
     PlateauTilesetTransformContext.Provider,
     { value: context },

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
-// グローバルスタイル
+// Global styles
 const globalStyles = `
   body {
     margin: 0;
@@ -21,7 +21,7 @@ const globalStyles = `
   }
 `;
 
-// グローバルスタイルを注入
+// Inject global styles
 const styleElement = document.createElement('style');
 styleElement.innerHTML = globalStyles;
 document.head.appendChild(styleElement);

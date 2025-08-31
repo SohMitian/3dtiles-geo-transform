@@ -1,4 +1,4 @@
-// Three.jsの型競合を避けるための最小限の型定義
+// Minimal type definitions to avoid Three.js type conflicts
 interface GLTFScene {
   position: {
     set: (...args: number[]) => void;
@@ -20,18 +20,18 @@ interface GLTFLoaderPluginLike {
 }
 
 /**
- * CESIUM_RTC拡張データ構造
+ * CESIUM_RTC extension data structure
  */
 export interface CesiumRTCExtension {
   center: [number, number, number];
 }
 
 /**
- * CESIUM_RTC拡張を処理するGLTFLoaderプラグイン
+ * GLTFLoader plugin to handle CESIUM_RTC extension
  * 
- * CESIUM_RTC（Relative To Center）拡張は、3D TilesでECEF座標の中心点に
- * 対するローカル座標系を定義するために使用されます。
- * これにより、大きな座標値を扱う際の精度の問題を回避できます。
+ * CESIUM_RTC (Relative To Center) extension is used in 3D Tiles to define
+ * a local coordinate system relative to a center point in ECEF coordinates.
+ * This helps avoid precision issues when dealing with large coordinate values.
  * 
  * @example
  * ```typescript
@@ -48,10 +48,10 @@ export class CesiumRTCPlugin implements GLTFLoaderPluginLike {
   private centerCallback?: (center: [number, number, number]) => void;
 
   /**
-   * 新しいCesiumRTCPluginインスタンスを作成
+   * Create a new CesiumRTCPlugin instance
    * 
-   * @param parser - GLTFLoaderからのGLTFParserインスタンス
-   * @param onCenterFound - RTC中心が見つかったときのオプションコールバック
+   * @param parser - GLTFParser instance from GLTFLoader
+   * @param onCenterFound - Optional callback when RTC center is found
    */
   constructor(parser: any, onCenterFound?: (center: [number, number, number]) => void) {
     this.parser = parser as GLTFParserLike;
@@ -59,11 +59,11 @@ export class CesiumRTCPlugin implements GLTFLoaderPluginLike {
   }
 
   /**
-   * ルートシーンがロードされた後に呼ばれる
-   * RTC中心オフセットをシーン位置に適用
+   * Called after the root scene is loaded
+   * Applies RTC center offset to scene position
    * 
-   * @param result - ロードされたGLTF結果
-   * @returns null（GLTFLoaderPluginインターフェースで必須）
+   * @param result - Loaded GLTF result
+   * @returns null (required by GLTFLoaderPlugin interface)
    */
   afterRoot(result: any): null {
     const extensions = (this.parser as any).json?.extensions;
@@ -71,15 +71,15 @@ export class CesiumRTCPlugin implements GLTFLoaderPluginLike {
     if (extensions?.CESIUM_RTC?.center != null) {
       const center = extensions.CESIUM_RTC.center as [number, number, number];
       
-      // RTC中心をシーン位置として適用
+      // Apply RTC center as scene position
       result.scene.position.set(...center);
       
-      // コールバックが提供されていれば通知
+      // Notify if callback is provided
       if (this.centerCallback) {
         this.centerCallback(center);
       }
       
-      // 後で参照できるようにuserDataに中心を保存
+      // Store center in userData for later reference
       result.scene.userData.cesiumRTC = {
         center: center
       };
@@ -89,9 +89,9 @@ export class CesiumRTCPlugin implements GLTFLoaderPluginLike {
   }
 
   /**
-   * パースされたGLTFデータからRTC中心を取得
+   * Get RTC center from parsed GLTF data
    * 
-   * @returns RTC中心座標または見つからない場合はnull
+   * @returns RTC center coordinates or null if not found
    */
   getRTCCenter(): [number, number, number] | null {
     const extensions = (this.parser as any).json?.extensions;
@@ -105,10 +105,10 @@ export class CesiumRTCPlugin implements GLTFLoaderPluginLike {
 }
 
 /**
- * 設定付きでCesiumRTCPluginを作成するファクトリ関数
+ * Factory function to create CesiumRTCPlugin with configuration
  * 
- * @param config - プラグイン設定
- * @returns GLTFLoader用のプラグインファクトリ関数
+ * @param config - Plugin configuration
+ * @returns Plugin factory function for GLTFLoader
  */
 export function createCesiumRTCPlugin(config?: {
   onCenterFound?: (center: [number, number, number]) => void;

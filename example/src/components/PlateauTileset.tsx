@@ -1,8 +1,8 @@
 /**
- * 3D Tiles サンプルコンポーネント
+ * 3D Tiles Sample Component
  * 
- * このサンプルは、3dtiles-geo-transformパッケージを使用して
- * 地理座標系の3D Tilesデータを適切な座標変換で読み込み、表示する方法を示しています。
+ * This sample demonstrates how to use the 3dtiles-geo-transform package
+ * to load and display geographic 3D Tiles data with proper coordinate transformation.
  */
 
 import React, { useEffect, useRef, useContext } from 'react';
@@ -14,9 +14,9 @@ import { CesiumRTCPlugin, PlateauTilesetTransformContext } from '3dtiles-geo-tra
 import * as THREE from 'three';
 
 interface PlateauTilesetProps {
-  /** tileset.jsonファイルへのURL */
+  /** URL to tileset.json file */
   url: string;
-  /** タイルセットがロードされたときのコールバック */
+  /** Callback when tileset is loaded */
   onLoad?: (tiles: TilesRenderer) => void;
 }
 
@@ -28,50 +28,50 @@ export const PlateauTileset: React.FC<PlateauTilesetProps> = ({ url, onLoad }) =
   const setCenter = context?.setCenter;
 
   useEffect(() => {
-    // ステップ1: 圧縮ジオメトリ用のDRACOデコーダーをセットアップ
+    // Step 1: Set up DRACO decoder for compressed geometry
     const dracoLoader = new DRACOLoader();
     dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
 
-    // ステップ2: DRACOサポート付きGLTFローダーをセットアップ
+    // Step 2: Set up GLTF loader with DRACO support
     const gltfLoader = new GLTFLoader();
     gltfLoader.setDRACOLoader(dracoLoader);
     
-    // ステップ3: CESIUM_RTC拡張を処理するCesiumRTCPluginを登録
-    // これはRTC座標を使用するPLATEAUデータにとって重要です
+    // Step 3: Register CesiumRTCPlugin to handle CESIUM_RTC extension
+    // This is important for PLATEAU data that uses RTC coordinates
     gltfLoader.register((parser: any) => new CesiumRTCPlugin(parser));
 
-    // ステップ4: タイルセットURLでTilesRendererを作成
+    // Step 4: Create TilesRenderer with tileset URL
     const tiles = new TilesRenderer(url);
     
-    // ステップ5: 異なるファイル形式用のローダーを設定
+    // Step 5: Set up loaders for different file formats
     tiles.manager.addHandler(/\.gltf$/, gltfLoader);
     tiles.manager.addHandler(/\.b3dm$/, gltfLoader);
     
-    // ステップ6: LOD管理のためのカメラと解像度を設定
+    // Step 6: Set camera and resolution for LOD management
     tiles.setCamera(camera);
     tiles.setResolutionFromRenderer(camera, gl);
 
-    // ステップ7: LOD設定を構成
+    // Step 7: Configure LOD settings
     tiles.errorTarget = 6;
     tiles.maxDepth = 15;
 
     tilesRef.current = tiles;
-    setTiles(tiles);  // 再レンダリングをトリガー
+    setTiles(tiles);  // Trigger re-rendering
 
-    // ステップ8: タイルセットロードイベントを処理
+    // Step 8: Handle tileset load event
     tiles.addEventListener('load-tile-set', () => {
-      // バウンディングボックスから中心を計算
+      // Calculate center from bounding box
       const box = new THREE.Box3();
       if (tiles.getBoundingBox(box)) {
         const center = new THREE.Vector3();
         box.getCenter(center);
         
-        // 座標変換のための中心を設定
+        // Set center for coordinate transformation
         if (setCenter) {
           setCenter(center);
         }
         
-        // カメラ位置を調整
+        // Adjust camera position
         const sphere = new THREE.Sphere();
         tiles.getBoundingSphere(sphere);
         const distance = sphere.radius * 2.5;
@@ -84,13 +84,13 @@ export const PlateauTileset: React.FC<PlateauTilesetProps> = ({ url, onLoad }) =
       }
     });
     
-    // エラー処理
+    // Error handling
     tiles.addEventListener('load-tile-set-error', (error: any) => {
       console.error('Failed to load tileset:', error);
       console.error('URL:', url);
     });
 
-    // クリーンアップ
+    // Cleanup
     return () => {
       if (tilesRef.current) {
         tilesRef.current.dispose();
@@ -99,13 +99,13 @@ export const PlateauTileset: React.FC<PlateauTilesetProps> = ({ url, onLoad }) =
     };
   }, [url, camera, gl, setCenter, onLoad]);
 
-  // 毎フレームタイルを更新
+  // Update tiles every frame
   useFrame(() => {
     if (tilesRef.current) {
       tilesRef.current.update();
     }
   });
 
-  // タイルグループをレンダリング
+  // Render tiles group
   return tiles ? <primitive object={tiles.group} /> : null;
 };

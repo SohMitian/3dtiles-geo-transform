@@ -1,14 +1,14 @@
 /**
- * 3D Tiles Geographic Transform サンプルアプリケーション
+ * 3D Tiles Geographic Transform Sample Application
  * 
- * このサンプルは、3dtiles-geo-transformパッケージを使用して
- * 地理座標系の3D Tilesデータ（PLATEAU等）をReactアプリケーションで
- * 読み込み、表示する方法を示しています。
+ * This sample demonstrates how to use the 3dtiles-geo-transform package
+ * to load and display geographic 3D Tiles data (such as PLATEAU) 
+ * in a React application.
  * 
- * 主な機能:
- * - CESIUM_RTC拡張をサポートした3D Tilesの読み込み
- * - ECEFからローカル座標への自動座標変換
- * - 適切なカメラ位置とコントロール
+ * Key features:
+ * - Loading 3D Tiles with CESIUM_RTC extension support
+ * - Automatic coordinate transformation from ECEF to local
+ * - Proper camera positioning and controls
  */
 
 import React, { Suspense, useState } from 'react';
@@ -18,7 +18,7 @@ import { PlateauTilesetTransform } from '3dtiles-geo-transform';
 import { PlateauTileset } from './components/PlateauTileset';
 import { SceneHelpers } from './components/SceneHelpers';
 
-// スタイル定義
+// Style definitions
 const styles = {
   app: {
     width: '100vw',
@@ -56,7 +56,7 @@ const styles = {
   },
 };
 
-// パルスアニメーションを追加
+// Add pulse animation
 const pulseKeyframes = `
   @keyframes pulse {
     0%, 100% {
@@ -68,11 +68,11 @@ const pulseKeyframes = `
   }
 `;
 
-// PLATEAUデータセット
-// 注: このURLはCORS問題を回避するためにプロキシを使用しています。
-// 実際のデータは https://plateau.geospatial.jp でホストされています
+// PLATEAU dataset
+// Note: This URL uses a proxy to avoid CORS issues.
+// The actual data is hosted at https://plateau.geospatial.jp
 const PLATEAU_DATASET = {
-  name: '東京都千代田区 建築物（テクスチャ付き）',
+  name: 'Tokyo Chiyoda Ward Buildings (with textures)',
   url: '/api/plateau/main/data/3d-tiles/bldg/13100_tokyo/13101_chiyoda-ku/texture/tileset.json'
 };
 
@@ -83,29 +83,29 @@ const App: React.FC = () => {
     <>
       <style>{pulseKeyframes}</style>
       <div style={styles.app}>
-        {/* 情報パネル */}
+        {/* Information panel */}
         <div style={styles.controls}>
           <h1 style={styles.title}>3D Tiles Geo Transform Example</h1>
           <p style={styles.text}>Dataset: {PLATEAU_DATASET.name}</p>
           {isLoading && <p style={styles.loading}>Loading...</p>}
         </div>
 
-      {/* ダークな背景の3Dキャンバス */}
+      {/* 3D canvas with dark background */}
       <Canvas 
         camera={{ position: [1000, 1000, 1000], near: 1, far: 1000000 }}
         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
         gl={{ antialias: true }}
         onCreated={({ gl }) => {
-          // ダークな背景色を設定
+          // Set dark background color
           gl.setClearColor(0x0a0a0a, 1);
         }}
       >
-        {/* ダークシーン用の強化された照明 */}
+        {/* Enhanced lighting for dark scene */}
         <ambientLight intensity={0.4} />
         <directionalLight position={[100, 100, 50]} intensity={0.8} castShadow />
         <directionalLight position={[-100, 100, -50]} intensity={0.4} />
         
-        {/* シーンヘルパー - グリッドと軸 */}
+        {/* Scene helpers - grid and axes */}
         <SceneHelpers 
           gridSize={10000}
           gridDivisions={100}
@@ -114,13 +114,13 @@ const App: React.FC = () => {
           showAxes={true}
         />
 
-        {/* 変換付きPLATEAUタイルセット */}
+        {/* PLATEAU tileset with transformation */}
         <Suspense fallback={null}>
           {/* 
-            PlateauTilesetTransformが提供する機能:
-            - ECEFからローカル座標への座標変換
-            - ローカルの上方向に合わせた適切な回転
-            - 子コンポーネント用のコンテキスト
+            PlateauTilesetTransform provides:
+            - Coordinate transformation from ECEF to local
+            - Proper rotation aligned with local up direction
+            - Context for child components
           */}
           <PlateauTilesetTransform>
             <PlateauTileset 
@@ -132,7 +132,7 @@ const App: React.FC = () => {
           </PlateauTilesetTransform>
         </Suspense>
 
-        {/* カメラコントロール */}
+        {/* Camera controls */}
         <OrbitControls 
           enableDamping
           dampingFactor={0.05}
@@ -140,7 +140,7 @@ const App: React.FC = () => {
           maxPolarAngle={Math.PI / 2}
         />
 
-        {/* パフォーマンス統計 */}
+        {/* Performance statistics */}
         <Stats />
       </Canvas>
       </div>

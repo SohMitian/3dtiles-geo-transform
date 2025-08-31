@@ -1,13 +1,13 @@
-// コア機能（フレームワーク非依存）
+// Core functionality (framework-agnostic)
 export * from './core/constants';
 export * from './core/ecef';
 export * from './core/transform';
 
-// Three.js固有のエクスポート
+// Three.js specific exports
 export { CesiumRTCPlugin, createCesiumRTCPlugin } from './three/CesiumRTCPlugin';
 export { TilesetTransform, createTransformMatrix } from './three/TilesetTransform';
 export type { CesiumRTCExtension } from './three/CesiumRTCPlugin';
 export type { TilesetTransformOptions } from './three/TilesetTransform';
 
-// Reactコンポーネント
+// React components
 export { PlateauTilesetTransform, PlateauTilesetTransformContext } from './react/PlateauTransform';
