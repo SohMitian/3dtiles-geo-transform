@@ -101,7 +101,7 @@ This library works with any 3D Tiles dataset that uses:
 - Standard 3D Tiles format (OGC specification)
 
 Compatible with:
-- Geographic 3D city models (e.g., PLATEAU)
+- Geographic 3D city models
 - Cesium ion tilesets
 - Any geographic 3D Tiles data
 
