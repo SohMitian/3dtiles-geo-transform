@@ -2,20 +2,6 @@
   "name": "3dtiles-geo-transform",
   "version": "1.0.0",
   "description": "Geographic coordinate transformation library for 3D Tiles with Three.js and React support",
-  "main": "dist/index.js",
-  "module": "dist/index.esm.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
-  ],
-  "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
-    "test": "jest",
-    "prepublishOnly": "npm run build"
-  },
   "keywords": [
     "3d-tiles",
     "geographic-coordinates",
@@ -29,23 +15,41 @@
     "geospatial",
     "cesium-rtc"
   ],
-  "author": "",
-  "license": "MIT",
-  "peerDependencies": {
-    "@react-three/fiber": ">=8.0.0",
-    "react": ">=16.8.0",
-    "three": ">=0.150.0"
+  "homepage": "https://github.com/SohMitian/3dtiles-geo-transform#readme",
+  "bugs": {
+    "url": "https://github.com/SohMitian/3dtiles-geo-transform/issues"
   },
-  "peerDependenciesMeta": {
-    "react": {
-      "optional": true
-    },
-    "react-dom": {
-      "optional": true
-    },
-    "@react-three/fiber": {
-      "optional": true
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SohMitian/3dtiles-geo-transform.git"
+  },
+  "license": "MIT",
+  "author": "SohMitian",
+  "main": "dist/index.cjs",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.esm.js"
     }
+  },
+  "directories": {
+    "example": "example",
+    "test": "tests"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "jest",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",
@@ -62,12 +66,20 @@
     "tslib": "^2.6.2",
     "typescript": "^5.4.3"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/yourusername/3dtiles-geo-transform.git"
+  "peerDependencies": {
+    "@react-three/fiber": ">=8.0.0",
+    "react": ">=16.8.0",
+    "three": ">=0.150.0"
   },
-  "bugs": {
-    "url": "https://github.com/yourusername/3dtiles-geo-transform/issues"
-  },
-  "homepage": "https://github.com/yourusername/3dtiles-geo-transform#readme"
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "@react-three/fiber": {
+      "optional": true
+    }
+  }
 }

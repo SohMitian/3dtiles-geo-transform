@@ -1,5 +1,5 @@
 {
-  "name": "plateau-3dtiles-transform-example",
+  "name": "3dtiles-geo-transform-example",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
