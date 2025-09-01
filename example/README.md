@@ -1,6 +1,6 @@
 # 3dtiles-geo-transform Example
 
-This example demonstrates how to use the `3dtiles-geo-transform` library to load and display geographic 3D Tiles data (such as PLATEAU datasets) with proper coordinate transformations.
+This example demonstrates how to use the `3dtiles-geo-transform` library to load and display geographic 3D Tiles data with proper coordinate transformations.
 
 ## Setup
 
@@ -26,12 +26,12 @@ npm start
 
 ## Data Source
 
-This example uses PLATEAU 3D city model data from Tokyo's Chiyoda ward, served through a proxy to handle CORS issues.
+This example uses 3D city model data from Tokyo's Chiyoda ward, served through a proxy to handle CORS issues.
 
 ## Key Components
 
-- **PlateauTileset**: Demonstrates how to load 3D Tiles with the CesiumRTCPlugin
-- **PlateauTilesetTransform**: Shows coordinate transformation usage
+- **GeoTileset**: Demonstrates how to load 3D Tiles with the CesiumRTCPlugin
+- **TilesetTransformComponent**: Shows coordinate transformation usage
 - **SceneHelpers**: Provides visual debugging aids
 
 ## Learn More

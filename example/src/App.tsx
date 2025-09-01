@@ -2,7 +2,7 @@
  * 3D Tiles Geographic Transform Sample Application
  * 
  * This sample demonstrates how to use the 3dtiles-geo-transform package
- * to load and display geographic 3D Tiles data (such as PLATEAU) 
+ * to load and display geographic 3D Tiles data 
  * in a React application.
  * 
  * Key features:
@@ -14,8 +14,8 @@
 import React, { Suspense, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stats } from '@react-three/drei';
-import { PlateauTilesetTransform } from '3dtiles-geo-transform';
-import { PlateauTileset } from './components/PlateauTileset';
+import { TilesetTransformComponent } from '3dtiles-geo-transform';
+import { GeoTileset } from './components/GeoTileset';
 import { SceneHelpers } from './components/SceneHelpers';
 
 // Style definitions
@@ -71,9 +71,9 @@ const pulseKeyframes = `
 // PLATEAU dataset
 // Note: This URL uses a proxy to avoid CORS issues.
 // The actual data is hosted at https://plateau.geospatial.jp
-const PLATEAU_DATASET = {
+const GEO_DATASET = {
   name: 'Tokyo Chiyoda Ward Buildings (with textures)',
-  url: '/api/plateau/main/data/3d-tiles/bldg/13100_tokyo/13101_chiyoda-ku/texture/tileset.json'
+  url: '/api/tiles/main/data/3d-tiles/bldg/13100_tokyo/13101_chiyoda-ku/texture/tileset.json'
 };
 
 const App: React.FC = () => {
@@ -86,7 +86,7 @@ const App: React.FC = () => {
         {/* Information panel */}
         <div style={styles.controls}>
           <h1 style={styles.title}>3D Tiles Geo Transform Example</h1>
-          <p style={styles.text}>Dataset: {PLATEAU_DATASET.name}</p>
+          <p style={styles.text}>Dataset: {GEO_DATASET.name}</p>
           {isLoading && <p style={styles.loading}>Loading...</p>}
         </div>
 
@@ -114,22 +114,22 @@ const App: React.FC = () => {
           showAxes={true}
         />
 
-        {/* PLATEAU tileset with transformation */}
+        {/* tileset with transformation */}
         <Suspense fallback={null}>
           {/* 
-            PlateauTilesetTransform provides:
+            TilesetTransformComponent provides:
             - Coordinate transformation from ECEF to local
             - Proper rotation aligned with local up direction
             - Context for child components
           */}
-          <PlateauTilesetTransform>
-            <PlateauTileset 
-              url={PLATEAU_DATASET.url}
+          <TilesetTransformComponent>
+            <GeoTileset 
+              url={GEO_DATASET.url}
               onLoad={() => {
                 setIsLoading(false);
               }}
             />
-          </PlateauTilesetTransform>
+          </TilesetTransformComponent>
         </Suspense>
 
         {/* Camera controls */}

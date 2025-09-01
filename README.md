@@ -49,15 +49,15 @@ tilesRenderer.group.applyMatrix4(transformMatrix);
 ### React Three Fiber Usage
 
 ```jsx
-import { PlateauTilesetTransform } from '3dtiles-geo-transform';
+import { TilesetTransformComponent } from '3dtiles-geo-transform';
 import { Canvas } from '@react-three/fiber';
 
 function App() {
   return (
     <Canvas>
-      <PlateauTilesetTransform>
+      <TilesetTransformComponent>
         {/* Your 3D Tiles components */}
-      </PlateauTilesetTransform>
+      </TilesetTransformComponent>
     </Canvas>
   );
 }
@@ -90,7 +90,7 @@ Class for managing 3D tileset transformations.
 
 ### React Components
 
-#### `PlateauTilesetTransform`
+#### `TilesetTransformComponent`
 React component that provides transformation context for child components.
 
 ## Supported Data
@@ -101,13 +101,13 @@ This library works with any 3D Tiles dataset that uses:
 - Standard 3D Tiles format (OGC specification)
 
 Compatible with:
-- PLATEAU (Japanese 3D city models)
+- Geographic 3D city models (e.g., PLATEAU)
 - Cesium ion tilesets
 - Any geographic 3D Tiles data
 
 ## Example
 
-Check out the `example/` directory for a complete working example using PLATEAU data.
+Check out the `example/` directory for a complete working example using geographic 3D Tiles data.
 
 ```bash
 cd example
@@ -148,4 +148,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Credits
 
-This library is designed to work with 3D Tiles data, including PLATEAU datasets provided by the Ministry of Land, Infrastructure, Transport and Tourism of Japan.
+This library is designed to work with geographic 3D Tiles data from various sources, including government and commercial providers worldwide.

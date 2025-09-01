@@ -10,21 +10,21 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { TilesRenderer } from '3d-tiles-renderer';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
-import { CesiumRTCPlugin, PlateauTilesetTransformContext } from '3dtiles-geo-transform';
+import { CesiumRTCPlugin, TilesetTransformContext } from '3dtiles-geo-transform';
 import * as THREE from 'three';
 
-interface PlateauTilesetProps {
+interface GeoTilesetProps {
   /** URL to tileset.json file */
   url: string;
   /** Callback when tileset is loaded */
   onLoad?: (tiles: TilesRenderer) => void;
 }
 
-export const PlateauTileset: React.FC<PlateauTilesetProps> = ({ url, onLoad }) => {
+export const GeoTileset: React.FC<GeoTilesetProps> = ({ url, onLoad }) => {
   const { camera, gl } = useThree();
   const tilesRef = useRef<TilesRenderer | null>(null);
   const [tiles, setTiles] = React.useState<TilesRenderer | null>(null);
-  const context = useContext(PlateauTilesetTransformContext) as any;
+  const context = useContext(TilesetTransformContext) as any;
   const setCenter = context?.setCenter;
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export const PlateauTileset: React.FC<PlateauTilesetProps> = ({ url, onLoad }) =
     gltfLoader.setDRACOLoader(dracoLoader);
     
     // Step 3: Register CesiumRTCPlugin to handle CESIUM_RTC extension
-    // This is important for PLATEAU data that uses RTC coordinates
+    // This is important for geographic data that uses RTC coordinates
     gltfLoader.register((parser: any) => new CesiumRTCPlugin(parser));
 
     // Step 4: Create TilesRenderer with tileset URL

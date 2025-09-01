@@ -1,6 +1,6 @@
 {
-  "short_name": "PLATEAU Viewer",
-  "name": "PLATEAU 3D Tiles Viewer",
+  "short_name": "3D Tiles Viewer",
+  "name": "3D Tiles Viewer",
   "icons": [
     {
       "src": "favicon.ico",

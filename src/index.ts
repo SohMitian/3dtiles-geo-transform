@@ -10,4 +10,4 @@ export type { CesiumRTCExtension } from './three/CesiumRTCPlugin';
 export type { TilesetTransformOptions } from './three/TilesetTransform';
 
 // React components
-export { PlateauTilesetTransform, PlateauTilesetTransformContext } from './react/PlateauTransform';
+export { TilesetTransform as TilesetTransformComponent, TilesetTransformContext } from './react/TilesetTransform';

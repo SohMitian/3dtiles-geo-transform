@@ -9,15 +9,15 @@ import React, {
 } from 'react';
 import * as THREE from 'three';
 
-interface PlateauTilesetTransformContextType {
+interface TilesetTransformContextType {
   setCenter: (center: THREE.Vector3) => void;
 }
 
-export const PlateauTilesetTransformContext = createContext<PlateauTilesetTransformContextType>({
+export const TilesetTransformContext = createContext<TilesetTransformContextType>({
   setCenter: () => {}
 });
 
-interface PlateauTilesetTransformProps {
+interface TilesetTransformProps {
   children: ReactNode;
 }
 
@@ -30,7 +30,7 @@ interface TransformState {
  * React component for transforming 3D Tiles
  * This component provides context and transformation group for 3D Tiles
  */
-export const PlateauTilesetTransform: React.FC<PlateauTilesetTransformProps> = ({ children }) => {
+export const TilesetTransform: React.FC<TilesetTransformProps> = ({ children }) => {
   const [{ offset, rotation }, setState] = useState<TransformState>({});
   const groupRef = useRef<THREE.Group>(new THREE.Group());
 
@@ -57,7 +57,7 @@ export const PlateauTilesetTransform: React.FC<PlateauTilesetTransformProps> = (
 
   // Use React.createElement to avoid JSX type issues
   return React.createElement(
-    PlateauTilesetTransformContext.Provider,
+    TilesetTransformContext.Provider,
     { value: context },
     React.createElement(
       'primitive' as any,
