@@ -1,6 +1,6 @@
 {
   "name": "3dtiles-geo-transform",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Geographic coordinate transformation library for 3D Tiles with Three.js and React support",
   "keywords": [
     "3d-tiles",
